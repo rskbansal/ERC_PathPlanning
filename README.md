@@ -18,7 +18,7 @@ The obstacle list, start point and goal point are as follows.
 ]
 start = (1, 1)
 goal = (100, 1)
-# Calculate Path using RRT
+
 path = RRT(start,goal, obstacle_list)
-# Visualize the calculated path in Matplotlib
+
 visualize(path, obstacle_list)`
