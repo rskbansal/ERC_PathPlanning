@@ -1,6 +1,5 @@
 # ERC-Path-Planning
-
-Description
+## Description
 You will be given a set of obstacles and one source point and a destination point. All
 coordinates will be given. You need to find a path from the source to the destination
 using RRT. The path should not intersect any obstacles and should be a perfectly valid
