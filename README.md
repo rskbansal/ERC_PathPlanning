@@ -25,3 +25,6 @@ path = RRT(start,goal, obstacle_list)
 
 visualize(path, obstacle_list)
 ```
+
+## Result
+![erc](https://user-images.githubusercontent.com/45748739/168338388-9830f94b-a97b-4922-b5b9-48befa67d58c.jpg)
