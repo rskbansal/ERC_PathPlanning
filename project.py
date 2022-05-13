@@ -8,7 +8,7 @@ import random
 import math
 from shapely.geometry import Point, Polygon, LineString
 
-def CheckIfValidPoint(point, node_to_connect, obstacles):
+def validPoint(point, connect_nodes, obstacles):
     is_valid = True
     for obj in obstacles:
         if(obj.polygon.contains(Point(point[0], point[1]))):
@@ -16,7 +16,7 @@ def CheckIfValidPoint(point, node_to_connect, obstacles):
             break
     
         for j in range(len(obj.coord_list) - 1):
-            line_a = LineString([point, (node_to_connect.x_coord, node_to_connect.y_coord)])
+            line_a = LineString([point, (connect_nodes.x_coord, connect_nodes.y_coord)])
             line_b = LineString([(obj.coord_list[j][0], obj.coord_list[j][1]), (obj.coord_list[j+1][0], obj.coord_list[j+1][1])])
             if(line_a.intersects(line_b)):
                 is_valid = False
@@ -24,10 +24,10 @@ def CheckIfValidPoint(point, node_to_connect, obstacles):
 
     return is_valid
 
-def AddPointToTree(rand_point, min_index, nodes_in_tree, goal):
+def addPoint(rand_point, min_index, tree_nodes, goal):
     found_goal = False
 
-    nodes_in_tree.append(Nodes(rand_point[0], rand_point[1], min_index))
+    tree_nodes.append(Nodes(rand_point[0], rand_point[1], min_index))
 
     if(goal.polygon.contains(Point(rand_point[0], rand_point[1]))):
         found_goal = True
@@ -72,8 +72,8 @@ def RRT(start, goal_point, obstacle_list):
 
     goal = Figures([(goal_point[0], goal_point[1]), (goal_point[0], goal_point[1] - 0.2), (goal_point[0] - 0.2, goal_point[1] - 0.2), (goal_point[0] - 0.2, goal_point[1])])
     
-    nodes_in_tree = []
-    nodes_in_tree.append(Nodes(start[0], start[1], 0))
+    tree_nodes = []
+    tree_nodes.append(Nodes(start[0], start[1], 0))
 
     while (not found_goal):
         rand_point = SamplePoint(counter, bounds_of_plane, goal, sample_goal)
@@ -82,40 +82,40 @@ def RRT(start, goal_point, obstacle_list):
         min_dist = math.sqrt((rand_point[0] - start[0]) ** 2 + (rand_point[1] - start[1]) ** 2)
         min_index = 0
     
-        for i in range(len(nodes_in_tree)):
-            curr_dist = math.sqrt((rand_point[0] - nodes_in_tree[i].x_coord) ** 2 + (rand_point[1] - nodes_in_tree[i].y_coord) ** 2)
+        for i in range(len(tree_nodes)):
+            curr_dist = math.sqrt((rand_point[0] - tree_nodes[i].x_coord) ** 2 + (rand_point[1] - tree_nodes[i].y_coord) ** 2)
             if (curr_dist < min_dist):
                 min_dist = curr_dist
                 min_index = i
         
         if(min_dist > fixed_distance):
-            rand_point[0] = (((rand_point[0] - nodes_in_tree[min_index].x_coord) * fixed_distance)/min_dist) + nodes_in_tree[min_index].x_coord
-            rand_point[1] =  (((rand_point[1] - nodes_in_tree[min_index].y_coord) * fixed_distance)/min_dist) + nodes_in_tree[min_index].y_coord
+            rand_point[0] = (((rand_point[0] - tree_nodes[min_index].x_coord) * fixed_distance)/min_dist) + tree_nodes[min_index].x_coord
+            rand_point[1] =  (((rand_point[1] - tree_nodes[min_index].y_coord) * fixed_distance)/min_dist) + tree_nodes[min_index].y_coord
         
-        if(not CheckIfValidPoint(rand_point, nodes_in_tree[min_index], obstacles)):
+        if(not validPoint(rand_point, tree_nodes[min_index], obstacles)):
             continue
         
-        found_goal = AddPointToTree(rand_point, min_index, nodes_in_tree, goal)
+        found_goal = addPoint(rand_point, min_index, tree_nodes, goal)
 
         if(found_goal):
-            AddPointToTree(goal_point, len(nodes_in_tree) - 1, nodes_in_tree, goal)
+            addPoint(goal_point, len(tree_nodes) - 1, tree_nodes, goal)
 
-    return nodes_in_tree
+    return tree_nodes
 
-def visualize(nodes_in_tree, obstacle_list):
+def visualize(tree_nodes, obstacle_list):
   
     for obst in obstacle_list:
         obst.append(obst[0])
         xs, ys = zip(*obst)
         plt.plot(xs, ys)
 
-    for node in nodes_in_tree:
-        plt.plot([node.x_coord, nodes_in_tree[node.parent_index].x_coord], [node.y_coord, nodes_in_tree[node.parent_index].y_coord], "r.-", markersize = 3, linewidth = 0.3)
+    for node in tree_nodes:
+        plt.plot([node.x_coord, tree_nodes[node.parent_index].x_coord], [node.y_coord, tree_nodes[node.parent_index].y_coord], "r.-", markersize = 3, linewidth = 0.3)
 
-    curr_index = len(nodes_in_tree) - 1
+    curr_index = len(tree_nodes) - 1
     while(curr_index != 0):
-        parent_index = nodes_in_tree[curr_index].parent_index
-        plt.plot([nodes_in_tree[curr_index].x_coord, nodes_in_tree[parent_index].x_coord], [nodes_in_tree[curr_index].y_coord, nodes_in_tree[parent_index].y_coord], 'b.-', markersize = 5, linewidth = 0.5)
+        parent_index = tree_nodes[curr_index].parent_index
+        plt.plot([tree_nodes[curr_index].x_coord, tree_nodes[parent_index].x_coord], [tree_nodes[curr_index].y_coord, tree_nodes[parent_index].y_coord], 'b.-', markersize = 5, linewidth = 0.5)
         curr_index = parent_index
 
     plt.show()
