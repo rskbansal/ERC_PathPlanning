@@ -10,7 +10,8 @@ points for making the tree.
 The bounding box is the square with corners at (0, 0), (0, 100), (100, 100), (100, 0).
 The obstacle list, start point and goal point are as follows.
 
-```obstacle_list = [
+```
+obstacle_list = [
   [(40, 0), (40, 40), (50, 50), (60, 40), (50, 40)],
   [(10, 10), (20, 20), (10, 30), (0, 20)],
   [(50, 60), (70, 80), (60, 100), (40, 80), (45, 100)],
@@ -21,4 +22,5 @@ goal = (100, 1)
 
 path = RRT(start,goal, obstacle_list)
 
-visualize(path, obstacle_list)```
+visualize(path, obstacle_list)
+```
