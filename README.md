@@ -1,6 +1,5 @@
 # ERC-Path-Planning
-Replit project link
-https://replit.com/@RhythmBansal1/ERC#main.py
+[Replit project](https://replit.com/@RhythmBansal1/ERC#main.py)
 ## Description
 You will be given a set of obstacles and one source point and a destination point. All
 coordinates will be given. You need to find a path from the source to the destination
