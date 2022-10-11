@@ -3,12 +3,12 @@
 ## Description
 You will be given a set of obstacles and one source point and a destination point. All
 coordinates will be given. You need to find a path from the source to the destination
-using RRT. The path should not intersect any obstacles and should be a perfectly valid
+using ***RRT***. The path should not intersect any obstacles and should be a perfectly valid
 path. You will also be given a bounding box in which you are allowed to sample the
 points for making the tree.
 
 
-The bounding box is the square with corners at (0, 0), (0, 100), (100, 100), (100, 0).
+The bounding box is the square with corners at `(0, 0), (0, 100), (100, 100), (100, 0)`.
 The obstacle list, start point and goal point are as follows.
 
 ```python
