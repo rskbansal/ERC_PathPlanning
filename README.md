@@ -11,7 +11,7 @@ points for making the tree.
 The bounding box is the square with corners at (0, 0), (0, 100), (100, 100), (100, 0).
 The obstacle list, start point and goal point are as follows.
 
-```
+```python
 obstacle_list = [
   [(40, 0), (40, 40), (50, 50), (60, 40), (50, 40)],
   [(10, 10), (20, 20), (10, 30), (0, 20)],
